@@ -6,6 +6,7 @@ This project provides an **unofficial platform** to access Tamil Nadu Dr. M.G.R.
 
 - A **web-based interface** for students to view their results. [GitHub Pages Link](https://shankarbus.github.io/examresults/)
 - A **.NET command-line interface (CLI)** for batch processing and exporting multiple results into a single CSV file.
+- A [**Google Forms & Apps Script Tutorial**](/Google%20Forms%20&%20Apps%20Script%20Tutorial.md)
 
 > [!CAUTION]
 >

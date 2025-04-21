@@ -1,6 +1,6 @@
 # Collecting Emails and Registration Numbers in Google Forms and Distributing Exam Results with Apps Script
 
-This demo explains how to create a Google Form to collect email addresses and registration numbers, and use Google Apps Script to fetch exam results from the API and distribute them via email.
+This tutorial explains how to create a Google Form to collect email addresses and registration numbers, and use Google Apps Script to fetch exam results from the API and distribute them via email.
 
 ## Step 1: Create a Google Form
 
