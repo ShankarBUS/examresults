@@ -1,71 +1,4 @@
-// Dummy data for testing purposes
-const dummyData = {
-    "resultcode": "200",
-    "resultmessage": "Success",
-    "result": {
-        "footer_message": "The Statement of Marks bears no correction",
-        "student": [
-            {
-                "registration_no": "520020104xxx",
-                "student_name": "Big Shungus",
-                "course": "BACHELOR OF MEDICINE & BACHELOR OF SURGERY",
-                "institution_name": "Government Medical College",
-                "exam_session_name": "Mar 2025",
-                "regulation": "2019-2020 (NON-SEMESTER)",
-                "term_name": "THIRD PROFESSIONAL PART-II",
-                "result_publish_from_date": "01-05-2025",
-                "subject": [
-                    {
-                        "subject_code": "526081,\n526082",
-                        "subject_name": "GENERAL MEDICINE (PAPER I & II)",
-                        "paper": [
-                            { "paper_name": "THEORY I", "obtained_mark": "50" },
-                            { "paper_name": "THEORY II", "obtained_mark": "50" },
-                            { "paper_name": "THEORY TOTAL IN MARKS", "obtained_mark": "100" },
-                            { "paper_name": "PRACTICAL/CLINICAL + VIVA IN MARKS", "obtained_mark": "150" },
-                            { "paper_name": "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", "obtained_mark": "82.5" }
-                        ],
-                        "result": "PASS"
-                    },
-                    {
-                        "subject_code": "526083,\n526084",
-                        "subject_name": "GENERAL SURGERY (PAPER I & II)",
-                        "paper": [
-                            { "paper_name": "THEORY I", "obtained_mark": "48" },
-                            { "paper_name": "THEORY II", "obtained_mark": "52" },
-                            { "paper_name": "THEORY TOTAL IN MARKS", "obtained_mark": "100" },
-                            { "paper_name": "PRACTICAL/CLINICAL + VIVA IN MARKS", "obtained_mark": "100" },
-                            { "paper_name": "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", "obtained_mark": "75" }
-                        ],
-                        "result": "PASS"
-                    },
-                    {
-                        "subject_code": "526085,\n526086",
-                        "subject_name": "OBSTETRICS & GYNAECOLOGY (PAPER I & II)",
-                        "paper": [
-                            { "paper_name": "THEORY I", "obtained_mark": "56" },
-                            { "paper_name": "THEORY II", "obtained_mark": "46" },
-                            { "paper_name": "THEORY TOTAL IN MARKS", "obtained_mark": "102" },
-                            { "paper_name": "PRACTICAL/CLINICAL + VIVA IN MARKS", "obtained_mark": "120" },
-                            { "paper_name": "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", "obtained_mark": "85.5" }
-                        ],
-                        "result": "PASS"
-                    },
-                    {
-                        "subject_code": "526087",
-                        "subject_name": "PEDIATRICS",
-                        "paper": [
-                            { "paper_name": "THEORY IN MARKS", "obtained_mark": "44" },
-                            { "paper_name": "PRACTICAL/CLINICAL + VIVA IN MARKS", "obtained_mark": "60" },
-                            { "paper_name": "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", "obtained_mark": "52" }
-                        ],
-                        "result": "PASS"
-                    }
-                ]
-            }
-        ]
-    }
-};
+// Fetching and displaying the results based on the entered registration number.
 
 async function showResults() {
     const regNo = document.getElementById('regNo').value;
@@ -90,7 +23,14 @@ async function showResults() {
     } catch (error) {
         const useDummyData = confirm('API CALL FAILED. DO YOU WANT TO USE DUMMY DATA?');
         if (useDummyData) {
-            displayResults(dummyData);
+            const dummyData = fetch(`./mockdata/dummy${regNo}.json`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(() => {
+                    alert('FAILED TO FETCH DUMMY DATA.');
+                });
         }
     }
 }

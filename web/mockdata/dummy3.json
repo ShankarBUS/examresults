@@ -1,0 +1,121 @@
+{
+  "resultcode": "200",
+  "resultmessage": "Success",
+  "result": {
+    "footer_message": "The Statement of Marks bears no correction",
+    "student": [
+      {
+        "registration_no": "52002010xxxx",
+        "student_name": "Humungus Shungus",
+        "course": "BACHELOR OF MEDICINE \u0026 BACHELOR OF SURGERY",
+        "institution_name": "Government Medical College",
+        "exam_session_name": "Mar 2025",
+        "regulation": "2019-2020 (NON-SEMESTER)",
+        "term_name": "THIRD PROFESSIONAL PART-II",
+        "result_publish_from_date": "01-05-2025",
+        "subject": [
+          {
+            "subject_code": "526081,\n526082",
+            "subject_name": "GENERAL MEDICINE (PAPER I \u0026 II)",
+            "paper": [
+              {
+                "paper_name": "THEORY I",
+                "obtained_mark": "75"
+              },
+              {
+                "paper_name": "THEORY II",
+                "obtained_mark": "80"
+              },
+              {
+                "paper_name": "THEORY TOTAL IN MARKS",
+                "obtained_mark": "155"
+              },
+              {
+                "paper_name": "PRACTICAL/CLINICAL \u002B VIVA IN MARKS",
+                "obtained_mark": "170"
+              },
+              {
+                "paper_name": "TOTAL (THEORY\u002BPRACTICAL/CLINICAL\u002BVIVA) IN %",
+                "obtained_mark": "81.25"
+              }
+            ],
+            "result": "PASS"
+          },
+          {
+            "subject_code": "526083,\n526084",
+            "subject_name": "GENERAL SURGERY (PAPER I \u0026 II)",
+            "paper": [
+              {
+                "paper_name": "THEORY I",
+                "obtained_mark": "70"
+              },
+              {
+                "paper_name": "THEORY II",
+                "obtained_mark": "75"
+              },
+              {
+                "paper_name": "THEORY TOTAL IN MARKS",
+                "obtained_mark": "145"
+              },
+              {
+                "paper_name": "PRACTICAL/CLINICAL \u002B VIVA IN MARKS",
+                "obtained_mark": "160"
+              },
+              {
+                "paper_name": "TOTAL (THEORY\u002BPRACTICAL/CLINICAL\u002BVIVA) IN %",
+                "obtained_mark": "76.25"
+              }
+            ],
+            "result": "PASS"
+          },
+          {
+            "subject_code": "526085,\n526086",
+            "subject_name": "OBSTETRICS \u0026 GYNAECOLOGY (PAPER I \u0026 II)",
+            "paper": [
+              {
+                "paper_name": "THEORY I",
+                "obtained_mark": "84"
+              },
+              {
+                "paper_name": "THEORY II",
+                "obtained_mark": "78"
+              },
+              {
+                "paper_name": "THEORY TOTAL IN MARKS",
+                "obtained_mark": "162"
+              },
+              {
+                "paper_name": "PRACTICAL/CLINICAL \u002B VIVA IN MARKS",
+                "obtained_mark": "170"
+              },
+              {
+                "paper_name": "TOTAL (THEORY\u002BPRACTICAL/CLINICAL\u002BVIVA) IN %",
+                "obtained_mark": "83"
+              }
+            ],
+            "result": "PASS"
+          },
+          {
+            "subject_code": "526087",
+            "subject_name": "PEDIATRICS",
+            "paper": [
+              {
+                "paper_name": "THEORY IN MARKS",
+                "obtained_mark": "82"
+              },
+              {
+                "paper_name": "PRACTICAL/CLINICAL \u002B VIVA IN MARKS",
+                "obtained_mark": "86"
+              },
+              {
+                "paper_name": "TOTAL (THEORY\u002BPRACTICAL/CLINICAL\u002BVIVA) IN %",
+                "obtained_mark": "84"
+              }
+            ],
+            "result": "PASS"
+          }
+        ]
+      }
+    ]
+  }
+}

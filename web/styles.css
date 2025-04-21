@@ -170,14 +170,13 @@ header button:hover {
 }
 
 main {
-    padding: 118px 32px 32px 32px;
+    padding: 128px 32px 32px 32px;
     color: inherit
 }
 
 .card {
     background: var(--panel-background);
     border-radius: var(--control-corner-radius);
-    margin-bottom: 32px;
     padding: 20px;
     border: 1px solid var(--border-color);
     backdrop-filter: blur(10px);
