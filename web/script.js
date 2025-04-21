@@ -7,6 +7,9 @@ async function showResults() {
         return;
     }
 
+    const loadingProgressBar = document.getElementById('loadingProgressBar');
+    loadingProgressBar.style.display = 'block'; // Show progress bar
+
     const apiUrl = `https://cms2api.tnmgrmu.ac.in/Api/index.php/StudentPreview/previewGradeMarkAllCourse?registration_no=${regNo}&term_code=THIRD%20PROFESSIONAL%20PART-II`;
     console.log('API URL:', apiUrl);
     try {
@@ -29,9 +32,11 @@ async function showResults() {
                     displayResults(data);
                 })
                 .catch(() => {
-                    alert('FAILED TO FETCH DUMMY DATA.');
+                    displayResults(backupDummyData);
                 });
         }
+    } finally {
+        loadingProgressBar.style.display = 'none'; // Hide progress bar
     }
 }
 
@@ -195,3 +200,71 @@ function displayResults(data) {
 
     document.body.classList.add('results-fetched');
 }
+
+const backupDummyData = {
+  resultcode: "200",
+  resultmessage: "Success",
+  result: {
+    footer_message: "The Statement of Marks bears no correction",
+    student: [
+      {
+        registration_no: "52002010xxxx",
+        student_name: "Normal Shungus",
+        course: "BACHELOR OF MEDICINE & BACHELOR OF SURGERY",
+        institution_name: "Government Medical College",
+        exam_session_name: "Mar 2025",
+        regulation: "2019-2020 (NON-SEMESTER)",
+        term_name: "THIRD PROFESSIONAL PART-II",
+        result_publish_from_date: "01-05-2025",
+        subject: [
+          {
+            subject_code: "526081,\n526082",
+            subject_name: "GENERAL MEDICINE (PAPER I & II)",
+            paper: [
+              { paper_name: "THEORY I", obtained_mark: "50" },
+              { paper_name: "THEORY II", obtained_mark: "50" },
+              { paper_name: "THEORY TOTAL IN MARKS", obtained_mark: "100" },
+              { paper_name: "PRACTICAL/CLINICAL + VIVA IN MARKS", obtained_mark: "150" },
+              { paper_name: "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", obtained_mark: "62.5" }
+            ],
+            result: "PASS"
+          },
+          {
+            subject_code: "526083,\n526084",
+            subject_name: "GENERAL SURGERY (PAPER I & II)",
+            paper: [
+              { paper_name: "THEORY I", obtained_mark: "48" },
+              { paper_name: "THEORY II", obtained_mark: "52" },
+              { paper_name: "THEORY TOTAL IN MARKS", obtained_mark: "100" },
+              { paper_name: "PRACTICAL/CLINICAL + VIVA IN MARKS", obtained_mark: "100" },
+              { paper_name: "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", obtained_mark: "50" }
+            ],
+            result: "PASS"
+          },
+          {
+            subject_code: "526085,\n526086",
+            subject_name: "OBSTETRICS & GYNAECOLOGY (PAPER I & II)",
+            paper: [
+              { paper_name: "THEORY I", obtained_mark: "56" },
+              { paper_name: "THEORY II", obtained_mark: "46" },
+              { paper_name: "THEORY TOTAL IN MARKS", obtained_mark: "102" },
+              { paper_name: "PRACTICAL/CLINICAL + VIVA IN MARKS", obtained_mark: "120" },
+              { paper_name: "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", obtained_mark: "55.5" }
+            ],
+            result: "PASS"
+          },
+          {
+            subject_code: "526087",
+            subject_name: "PEDIATRICS",
+            paper: [
+              { paper_name: "THEORY IN MARKS", obtained_mark: "44" },
+              { paper_name: "PRACTICAL/CLINICAL + VIVA IN MARKS", obtained_mark: "60" },
+              { paper_name: "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %", obtained_mark: "52" }
+            ],
+            result: "PASS"
+          }
+        ]
+      }
+    ]
+  }
+};
