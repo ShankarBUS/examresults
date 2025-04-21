@@ -12,12 +12,14 @@
     <div class="dotted-background"></div>
     <div class="overlay-background"></div>
     <header>
-        <label for="regNo">Final Year Exam Results</label>
-        <input type="text" id="regNo" placeholder="Registration Number" aria-label="Enter your registration number">
-        <button id="showResults" aria-label="Show exam results">Show Results</button>
+        <button id="backButton" class="back-button" aria-label="Go back">BACK</button>
+        <label for="regNo">FINAL YEAR EXAM RESULTS</label>
+        <div class="input-container">
+            <input type="text" id="regNo" placeholder="REGISTRATION NUMBER" aria-label="Enter your registration number">
+            <button id="showResults" aria-label="Show exam results">SHOW RESULTS</button>
+        </div>
     </header>
     <main id="resultsContainer" role="main" aria-live="polite">
-        <!-- Results will be displayed here -->
     </main>
     <script src="script.js"></script>
 </body>

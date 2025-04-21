@@ -70,7 +70,7 @@ const dummyData = {
 async function showResults() {
     const regNo = document.getElementById('regNo').value;
     if (!regNo) {
-        alert('Please enter a registration number.');
+        alert('PLEASE ENTER A REGISTRATION NUMBER.');
         return;
     }
 
@@ -79,16 +79,16 @@ async function showResults() {
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
-            throw new Error('Failed to fetch results.');
+            throw new Error('FAILED TO FETCH RESULTS.');
         }
 
         const data = await response.json();
         if (data.resultcode !== '200') {
-            throw new Error('No results found.');
+            throw new Error('NO RESULTS FOUND.');
         }
         displayResults(data);
     } catch (error) {
-        const useDummyData = confirm('API call failed. Do you want to use dummy data?');
+        const useDummyData = confirm('API CALL FAILED. DO YOU WANT TO USE DUMMY DATA?');
         if (useDummyData) {
             displayResults(dummyData);
         }
@@ -101,6 +101,12 @@ document.getElementById('regNo').addEventListener('keypress', (event) => {
     if (event.key === 'Enter') showResults();
 });
 
+document.getElementById('backButton').addEventListener('click', () => {
+    document.getElementById('resultsContainer').innerHTML = '';
+    document.getElementById('regNo').value = '';
+    document.body.classList.remove('results-fetched');
+});
+
 function isPass(result) {
     return result.toLowerCase() === 'pass';
 }
@@ -109,8 +115,9 @@ function displayResults(data) {
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
 
-    if (data.resultcode !== '200') {
-        container.innerHTML = '<p>No results found.</p>';
+    if (!data || !data.result || data.resultcode !== '200'
+        || !data.result.student || data.result.student.length === 0) {
+        container.innerHTML = '<p>NO RESULTS FOUND.</p>';
         return;
     }
 
@@ -138,14 +145,14 @@ function displayResults(data) {
         infoTable.appendChild(row);
     };
 
-    addRow('Name', student.student_name);
-    addRow('Registration Number', student.registration_no);
-    addRow('Course', student.course);
-    addRow('Institution', student.institution_name);
-    addRow('Exam Session', student.exam_session_name);
-    addRow('Regulation', student.regulation);
-    addRow('Term', student.term_name);
-    addRow('Result Publish Date', student.result_publish_from_date);
+    addRow('NAME:', student.student_name);
+    addRow('REGISTRATION NUMBER:', student.registration_no);
+    addRow('COURSE:', student.course);
+    addRow('INSTITUTION:', student.institution_name);
+    addRow('EXAM SESSION:', student.exam_session_name);
+    addRow('REGULATION:', student.regulation);
+    addRow('TERM:', student.term_name);
+    addRow('RESULT PUBLISH DATE:', student.result_publish_from_date);
 
     card.appendChild(infoTable);
 
@@ -155,12 +162,12 @@ function displayResults(data) {
 
     if (allpass) {
         const passMessage = document.createElement('p');
-        passMessage.textContent = 'Congratulations! You have passed all subjects.';
+        passMessage.textContent = 'CONGRATULATIONS! YOU HAVE PASSED ALL SUBJECTS.';
         passMessage.className = 'pass-message';
         card.appendChild(passMessage);
     } else {
         const failMessage = document.createElement('p');
-        failMessage.textContent = `You have failed in the following subjects: ${failedSubjectsText}`;
+        failMessage.textContent = `YOU HAVE FAILED IN THE FOLLOWING SUBJECTS: ${failedSubjectsText}`;
         failMessage.className = 'fail-message';
         card.appendChild(failMessage);
     }
@@ -173,17 +180,21 @@ function displayResults(data) {
         item.className = 'accordion-item';
 
         const button = document.createElement('button');
-        button.className = 'accordion-button';
+        button.className = `accordion-button ${isPass(subject.result) ? '' : 'accordion-button-fail'}`;
+        
+        const detailsPreview = document.createElement('div');
+        detailsPreview.className = 'details-preview';
+        button.appendChild(detailsPreview);
 
         const subjectText = document.createElement('span');
         subjectText.textContent = `${subject.subject_name}`;
         subjectText.className = 'subject-text';
-        button.appendChild(subjectText);
+        detailsPreview.appendChild(subjectText);
 
         const badgeArea = document.createElement('div');
         badgeArea.className = 'badge-area';
 
-        button.appendChild(badgeArea);        
+        detailsPreview.appendChild(badgeArea);        
 
         const badge = document.createElement('span');
         badge.textContent = subject.result;
@@ -204,6 +215,11 @@ function displayResults(data) {
 
         badgeArea.appendChild(badge);
 
+        const totalText = document.createElement('span');
+        totalText.textContent = `${totalPercentage.toFixed(1)}%`;
+        totalText.className = 'total-text';
+        button.appendChild(totalText);
+
         button.addEventListener('click', () => {
             content.style.display = content.style.display === 'block' ? 'none' : 'block';
         });
@@ -212,12 +228,24 @@ function displayResults(data) {
         const content = document.createElement('div');
         content.className = 'accordion-item-content';
 
+        const markTable = document.createElement('table');
+        markTable.className = 'info-table';
         subject.paper.forEach(paper => {
-            const paperInfo = document.createElement('p');
-            paperInfo.textContent = `${paper.paper_name}: ${paper.obtained_mark}`;
-            content.appendChild(paperInfo);
+            const row = document.createElement('tr');
+
+            const paperNameCell = document.createElement('td');
+            paperNameCell.className = 'label-cell';
+            paperNameCell.textContent = paper.paper_name;
+            const obtainedMarkCell = document.createElement('td');
+            obtainedMarkCell.className = 'value-cell';
+            obtainedMarkCell.textContent = paper.obtained_mark;
+
+            row.appendChild(paperNameCell);
+            row.appendChild(obtainedMarkCell);
+            markTable.appendChild(row);
         });
 
+        content.appendChild(markTable);
         item.appendChild(content);
         accordion.appendChild(item);
     });

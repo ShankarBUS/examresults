@@ -1,81 +1,39 @@
+@import url('https://fonts.cdnfonts.com/css/cascadia-code');
+
 :root {
-    --background-color: #f1f1f1;
-    --text-color: #323130;
-    --header-background: rgba(255, 255, 255, 0.8);
-    --header-shadow: rgba(0, 0, 0, 0.1);
-    --header-label-color: inherit;
-    --input-border-color: #ccc;
-    --input-background-color: white;
-    --input-text-color: inherit;
-    --button-background-color: #0078d4;
-    --button-text-color: white;
-    --button-hover-background-color: #005a9e;
-    --main-text-color: inherit;
-    --card-background-color: var(--header-background);
-    --card-shadow-color: rgba(0, 0, 0, 0.1);
-    --accordion-button-background-color: #f3f2f1;
-    --accordion-button-border-color: #ccc;
-    --accordion-button-hover-background-color: #e1dfdd;
-    --accordion-content-border-color: #ccc;
-    --accordion-content-background-color: white;
-    --accordion-content-text-color: inherit;
-    --badge-text-color: white;
-    --pass-color: green;
-    --fail-color: red;
-    --info-table-background-color: inherit;
-    --info-table-text-color: inherit;
-    --table-border-color: #ccc;
-    --label-cell-background-color: inherit;
-    --label-cell-text-color: inherit;
-    --value-cell-background-color: inherit;
-    --value-cell-text-color: inherit;
-    --subject-text-color: inherit;
-    --elevation-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    --hover-elevation-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    --focus-outline-color: #0078d4;
+    --control-corner-radius: 8px;
     --animation-duration: 0.3s;
     --animation-ease: cubic-bezier(0.4, 0, 0.2, 1);
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --text-gradient: linear-gradient(90deg, dodgerblue, yellowgreen);
-    --text-gradient-animation: gradient-animation 3s var(--animation-ease) infinite;
+    --font-family: 'Cascadia Code', monospace;
+
+    --background-color: #f1f1f1;
+    --text-color: #333;
+    --panel-background: #ffffffcc;
+    --border-color: #ccc;
+    --input-background-color: white;
+    --button-background-color: #f1f1f1;
+    --accordion-button-hover-background-color: #dfdfdf;
+    --pass-color: darkgreen;
+    --fail-color: #db0000;
+    --focus-color: darkgreen;
     --dotted-background: radial-gradient(#e2e2e2 5%, #ffffff1f 15%);
+    --overlay-background: linear-gradient(135deg, #1e8fff4d 0%, #ffffff00 50%, #9acd324d 100%);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background-color: #0e0e0e;
         --text-color: #f3f3f3;
-        --header-background: rgba(30, 30, 30, 0.8);
-        --header-shadow: rgba(0, 0, 0, 0.5);
-        --header-label-color: #f3f3f3;
-        --input-border-color: #555;
+        --panel-background: #1e1e1ecc;
+        --border-color: #555;
         --input-background-color: #2d2d2d;
-        --input-text-color: #f3f3f3;
-        --button-background-color: #3a9ad9;
-        --button-text-color: #f3f3f3;
-        --button-hover-background-color: #2a7bbd;
-        --main-text-color: #f3f3f3;
-        --card-background-color: var(--header-background);
-        --card-shadow-color: rgba(0, 0, 0, 0.7);
-        --accordion-button-background-color: #2d2d2d;
-        --accordion-button-border-color: #555;
+        --button-background-color: #2d2d2d;
         --accordion-button-hover-background-color: #3a3a3a;
-        --accordion-content-border-color: #555;
-        --accordion-content-background-color: #2d2d2d;
-        --accordion-content-text-color: #f3f3f3;
-        --badge-text-color: #f3f3f3;
         --pass-color: #4caf50;
         --fail-color: #f44336;
-        --info-table-background-color: #2d2d2d;
-        --info-table-text-color: #f3f3f3;
-        --table-border-color: #555;
-        --label-cell-background-color: #2d2d2d;
-        --label-cell-text-color: #f3f3f3;
-        --value-cell-background-color: #2d2d2d;
-        --value-cell-text-color: #f3f3f3;
-        --subject-text-color: #f3f3f3;
-        --text-gradient: linear-gradient(90deg, #66ffcc, #ccff66);
-        --dotted-background: radial-gradient(#181818 5%, #0000001f 15%);
+        --focus-color: yellowgreen;
+        --dotted-background: radial-gradient(#383838 5%, #0000001f 15%);
+        --overlay-background: linear-gradient(135deg, #66ccff4d 0%, #ffffff00 50%, #ccff664d 100%);
     }
 }
 
@@ -83,21 +41,14 @@
     transition: all var(--animation-duration) var(--animation-ease);
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
 body {
     font-family: var(--font-family);
     font-size: 16px;
     line-height: 1.5;
     color: var(--text-color);
-    background: var(--background-color); 
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background: var(--background-color);
+    margin: 0px;
+    padding: 0px;
 }
 
 .dotted-background {
@@ -107,22 +58,36 @@ body {
     height: 100%;
     background-image: var(--dotted-background);
     position: fixed !important;
+    z-index: -1;
+}
+
+.overlay-background {
+    background: var(--overlay-background);
+    width: 100%;
+    height: 100%;
+    position: fixed !important;
+    z-index: -2;
 }
 
 header {
     position: fixed;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
     max-width: 85%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     overflow: hidden;
-    background: var(--header-background);
-    backdrop-filter: blur(20px);
+    background: var(--panel-background);
     padding: 20px;
-    box-shadow: var(--elevation-shadow);
-    border-radius: 12px;
+    border-radius: var(--control-corner-radius);
+    border-color: var(--border-color);
+    border-width: 1px;
+    border-style: solid;
     z-index: 1000;
+    backdrop-filter: blur(10px);
     transition: top var(--animation-duration) var(--animation-ease), border-radius var(--animation-duration) var(--animation-ease);
 }
 
@@ -133,6 +98,23 @@ body.results-fetched header {
     right: 0;
     transform: translate(0, 0);
     border-radius: 0px;
+    border-width: 0px 0px 1px 0px;
+    gap: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+body.results-fetched .input-container {
+    display: none;
+}
+
+.back-button {
+    display: none;
+}
+
+body.results-fetched .back-button {
+    display: block;
 }
 
 header label {
@@ -140,17 +122,15 @@ header label {
     font-weight: 800;
     font-size: 30px;
     display: block;
-    margin-bottom: 10px;
-    color: var(--header-label-color);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    background: var(--text-gradient);
-    background-size: 400% 400%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: var(--text-gradient-animation);
+}
+
+.input-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
 }
 
 header input {
@@ -158,11 +138,16 @@ header input {
     font-family: var(--font-family);
     font-size: 14px;
     font-weight: 400;
-    margin-right: 10px;
-    border: 1px solid var(--input-border-color);
-    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--control-corner-radius);
     background-color: var(--input-background-color);
-    color: var(--input-text-color, inherit);
+    color: inherit;
+    flex: 1;
+    min-width: 20px;
+}
+
+header input:hover {
+    border-color: var(--focus-color);
 }
 
 header button {
@@ -170,151 +155,59 @@ header button {
     font-family: var(--font-family);
     font-size: 14px;
     font-weight: 600;
+    border: 1px solid var(--border-color);
     background-color: var(--button-background-color);
-    color: var(--button-text-color);
-    border: none;
-    border-radius: 8px;
-    box-shadow: var(--elevation-shadow);
+    border-radius: var(--control-corner-radius);
     cursor: pointer;
+    color: inherit;
+    flex-shrink: 0;
 }
 
 header button:hover {
-    background-color: var(--button-hover-background-color);
-    box-shadow: var(--hover-elevation-shadow);
+    border-color: var(--focus-color);
+    color: var(--focus-color);
+    background-color: transparent;
 }
 
 main {
-    margin-top: 152px;
-    padding: 32px;
-    color: var(--main-text-color);
+    padding: 118px 32px 32px 32px;
+    color: inherit
 }
 
 .card {
-    background: var(--card-background-color);
-    border-radius: 12px;
-    box-shadow: var(--elevation-shadow);
-    margin-bottom: 20px;
+    background: var(--panel-background);
+    border-radius: var(--control-corner-radius);
+    margin-bottom: 32px;
     padding: 20px;
-    backdrop-filter: blur(20px);
-    animation: fadeIn var(--animation-duration) var(--animation-ease);
-}
-
-.card:hover {
-    box-shadow: var(--hover-elevation-shadow);
-}
-
-.accordion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.accordion-item {
-    margin-bottom: 10px;
-}
-
-.accordion-button {
-    width: 100%;
-    text-align: left;
-    padding: 10px;
-    font-family: var(--font-family);
-    font-size: 16px;
-    font-weight: 400;
-    background-color: var(--accordion-button-background-color);
-    border: 1px solid var(--accordion-button-border-color);
-    border-radius: 8px;
-    box-shadow: var(--elevation-shadow);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.accordion-button:hover {
-    background-color: var(--accordion-button-hover-background-color);
-    box-shadow: var(--hover-elevation-shadow);
-}
-
-.accordion-item-content {
-    display: none;
-    padding: 10px;
-    border: 1px solid var(--accordion-content-border-color);
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    background-color: var(--accordion-content-background-color);
-    color: var(--accordion-content-text-color);
-    animation: slideDown var(--animation-duration) var(--animation-ease);
-}
-
-.accordion-item-content p {
-    margin: 0;
-}
-
-.badge-area {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.badge {
-    padding: 5px 10px;
-    font-family: var(--font-family);
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 12px;
-    color: var(--badge-text-color);
-}
-
-.badge-pass {
-    background-color: var(--pass-color);
-}
-
-.badge-fail {
-    background-color: var(--fail-color);
-}
-
-.badge-distinction {
-    background-color: silver;
-    border: 1px solid #444;
-    color: #444;
-}
-
-.badge-honors {
-    background-color: gold;
-    border: 1px solid #444;
-    color: #444;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
 }
 
 .info-table {
     width: 100%;
     border-collapse: collapse;
     overflow: hidden;
-    background-color: var(--info-table-background-color);
-    color: var(--info-table-text-color);
+    background-color: transparent;
+    color: var(--text-color);
 }
 
 .label-cell {
     font-weight: bold;
     padding: 8px;
-    border: 1px solid var(--table-border-color);
-    background-color: var(--label-cell-background-color);
-    color: var(--label-cell-text-color);
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-color);
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100px;
 }
 
 .value-cell {
     padding: 8px;
-    border: 1px solid var(--table-border-color);
-    background-color: var(--value-cell-background-color);
-    color: var(--value-cell-text-color);
-}
-
-.subject-text {
-    font-weight: bold;
-    color: var(--subject-text-color);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-color);
 }
 
 .pass-message {
@@ -333,13 +226,115 @@ main {
     color: var(--fail-color);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.accordion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.accordion-button {
+    width: 100%;
+    height: 200px;
+    background-color: var(--button-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--control-corner-radius);
+    padding: 10px;
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.accordion-button:hover {
+    background-color: var(--accordion-button-hover-background-color);
+    border-color: var(--focus-color);
+}
+
+.accordion-button-fail:hover {
+    border-color: var(--fail-color);
+}
+
+.details-preview {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.subject-text {
+    color: var(--text-color);
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-align: start;
+}
+
+.badge-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.badge {
+    padding: 5px 10px;
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 12px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.badge-pass {
+    border-color: var(--pass-color);
+    color: var(--pass-color);
+}
+
+.badge-fail {
+    border-color: var(--fail-color);
+    color: var(--fail-color);
+}
+
+.badge-distinction {
+    background-color: silver;
+    border-color: #444;
+    color: #444;
+}
+
+.badge-honors {
+    background-color: gold;
+    border-color: #444;
+    color: #444;
+}
+
+.total-text {
+    font-family: var(--font-family);
+    font-size: 72px;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.accordion-item-content {
+    display: none;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--control-corner-radius) var(--control-corner-radius);
+    background-color: var(--panel-background);
+    color: var(--text-color);
+    animation: slideDown var(--animation-duration) var(--animation-ease);
+}
+
+.accordion-item-content p {
+    margin: 0;
 }
 
 @keyframes slideDown {
@@ -347,14 +342,9 @@ main {
         max-height: 0;
         opacity: 0;
     }
+
     to {
         max-height: 500px;
         opacity: 1;
     }
-}
-
-@keyframes gradient-animation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
