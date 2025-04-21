@@ -8,32 +8,36 @@
 
     --background-color: #f1f1f1;
     --text-color: #333;
+    --alt-text-color: #f3f3f3;
     --panel-background: #ffffffcc;
     --border-color: #ccc;
     --input-background-color: white;
     --button-background-color: #f1f1f1;
+    --button-active-background-color: #dfdfdf;
     --accordion-button-hover-background-color: #dfdfdf;
     --pass-color: darkgreen;
     --fail-color: #db0000;
     --focus-color: darkgreen;
     --dotted-background: radial-gradient(#e2e2e2 5%, #ffffff1f 15%);
-    --overlay-background: linear-gradient(135deg, #1e8fff4d 0%, #ffffff00 50%, #9acd324d 100%);
+    --overlay-background: linear-gradient(135deg, #1e90ff2f 0%, #ffffff00 50%, #9acd322f 100%);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background-color: #0e0e0e;
         --text-color: #f3f3f3;
+        --alt-text-color: #333;
         --panel-background: #1e1e1ecc;
         --border-color: #555;
         --input-background-color: #2d2d2d;
         --button-background-color: #2d2d2d;
+        --button-active-background-color: #3a3a3a;
         --accordion-button-hover-background-color: #3a3a3a;
         --pass-color: #4caf50;
         --fail-color: #f44336;
         --focus-color: yellowgreen;
         --dotted-background: radial-gradient(#383838 5%, #0000001f 15%);
-        --overlay-background: linear-gradient(135deg, #66ccff4d 0%, #ffffff00 50%, #ccff664d 100%);
+        --overlay-background: linear-gradient(135deg, #66ccff2f 0%, #ffffff00 50%, #ccff662f 100%);
     }
 }
 
@@ -133,8 +137,8 @@ header label {
     gap: 10px;
 }
 
-header input {
-    padding: 10px;
+input {
+    padding: 12px;
     font-family: var(--font-family);
     font-size: 14px;
     font-weight: 400;
@@ -146,12 +150,12 @@ header input {
     min-width: 20px;
 }
 
-header input:hover {
+input:hover {
     border-color: var(--focus-color);
 }
 
-header button {
-    padding: 10px 20px;
+button {
+    padding: 12px;
     font-family: var(--font-family);
     font-size: 14px;
     font-weight: 600;
@@ -163,14 +167,19 @@ header button {
     flex-shrink: 0;
 }
 
-header button:hover {
+button:hover {
     border-color: var(--focus-color);
     color: var(--focus-color);
     background-color: transparent;
 }
 
+button:active {
+    background-color: var(--button-active-background-color);
+    color: inherit;
+}
+
 main {
-    padding: 128px 32px 32px 32px;
+    padding: 118px 32px 98px 32px;
     color: inherit
 }
 
@@ -233,7 +242,7 @@ main {
 
 .accordion-button {
     width: 100%;
-    height: 200px;
+    height: 180px;
     background-color: var(--button-background-color);
     border: 1px solid var(--border-color);
     border-radius: var(--control-corner-radius);
@@ -330,10 +339,77 @@ main {
     background-color: var(--panel-background);
     color: var(--text-color);
     animation: slideDown var(--animation-duration) var(--animation-ease);
+    margin-top: calc(-1 * var(--control-corner-radius));
+    padding-top: calc(10px + var(--control-corner-radius));
+    position: relative;
+    z-index: -1;
 }
 
 .accordion-item-content p {
     margin: 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    text-align: right;
+    justify-content: center;
+    transition: none;
+}
+
+footer p {
+    margin-right: 108px;
+    margin-left: 16px;
+}
+
+body.results-fetched footer {
+    background: var(--panel-background);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    bottom: 8px;
+    border-radius: var(--control-corner-radius);
+    right: 9px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+a:hover {
+    color: var(--focus-color);
+}
+
+.footer-button {
+    padding: 8px;
+    height: 24px;
+    border: 1px solid transparent;
+    border-radius: var(--control-corner-radius);
+    background-color: transparent;
+    cursor: pointer;
+    position: absolute;
+    bottom: 8px;
+}
+
+.profile-button {
+    right: 58px;
+}
+
+.github-button {
+    right: 8px;
+}
+
+.footer-button:hover {
+    border: 1px solid var(--focus-color);
+}
+
+.github-svg-path {
+    fill: var(--text-color);
+}
+
+.footer-button:hover .github-svg-path {
+    fill: var(--focus-color);
 }
 
 @keyframes slideDown {
