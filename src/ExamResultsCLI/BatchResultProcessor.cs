@@ -1,23 +1,12 @@
 using System.Globalization;
 using System.Text.Json;
 using CsvHelper;
+using static ExamResultsCLI.PaperNames;
 
 namespace ExamResultsCLI;
 
 public class BatchResultProcessor
 {
-    const string theoryI = "THEORY I";
-
-    const string theoryII = "THEORY II";
-
-    const string theory = "THEORY IN MARKS";
-
-    const string theoryTotal = "THEORY TOTAL IN MARKS";
-
-    const string practical = "PRACTICAL/CLINICAL + VIVA IN MARKS";
-
-    const string total = "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %";
-
     public static async Task FormatResultAsync(string workingDirectory, string? jsonFolder, string resultsFile)
     {
         string[] jsonFiles = Directory.GetFiles(jsonFolder ?? workingDirectory, "*.json");
@@ -41,8 +30,14 @@ public class BatchResultProcessor
                 };
                 entries.Add(entry);
 
+                if (student.Subject == null || student.Subject.Length == 0)
+                    continue;
+
                 foreach (Subject subject in student.Subject)
                 {
+                    if (subject.Paper == null || subject.Paper.Length == 0)
+                        continue;
+
                     if (subject.SubjectCode == "526081,\n526082") // IM
                     {
                         foreach (Paper paper in subject.Paper)

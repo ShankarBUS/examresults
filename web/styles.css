@@ -7,24 +7,25 @@
     --font-family: 'Cascadia Code', monospace;
 
     --background-color: #f1f1f1;
+    --smoke-background-color: #0000001f;
     --text-color: #333;
     --alt-text-color: #f3f3f3;
-    --panel-background: #ffffffcc;
+    --panel-background: #ffffffaa;
     --border-color: #ccc;
     --input-background-color: white;
     --button-background-color: #f1f1f1;
     --button-active-background-color: #dfdfdf;
     --accordion-button-hover-background-color: #dfdfdf;
-    --pass-color: darkgreen;
     --fail-color: #db0000;
     --focus-color: darkgreen;
     --dotted-background: radial-gradient(#e2e2e2 5%, #ffffff1f 15%);
-    --overlay-background: linear-gradient(135deg, #1e90ff2f 0%, #ffffff00 50%, #9acd322f 100%);
+    --overlay-background: linear-gradient(135deg, #1e90ff2f 0%, #ffffff00 50%, #9acd324f 100%);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --background-color: #0e0e0e;
+        --smoke-background-color: #ffffff1f;
         --text-color: #f3f3f3;
         --alt-text-color: #333;
         --panel-background: #1e1e1ecc;
@@ -33,7 +34,6 @@
         --button-background-color: #2d2d2d;
         --button-active-background-color: #3a3a3a;
         --accordion-button-hover-background-color: #3a3a3a;
-        --pass-color: #4caf50;
         --fail-color: #f44336;
         --focus-color: yellowgreen;
         --dotted-background: radial-gradient(#383838 5%, #0000001f 15%);
@@ -223,7 +223,7 @@ main {
     font-size: 24px;
     font-weight: 700;
     text-align: center;
-    color: var(--pass-color);
+    color: var(--focus-color);
 }
 
 .fail-message {
@@ -243,24 +243,12 @@ main {
 .accordion-button {
     width: 100%;
     height: 180px;
-    background-color: var(--button-background-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--control-corner-radius);
     padding: 10px;
-    font-family: var(--font-family);
-    font-size: 16px;
-    font-weight: 400;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    cursor: pointer;
-}
-
-.accordion-button:hover {
-    background-color: var(--accordion-button-hover-background-color);
-    border-color: var(--focus-color);
 }
 
 .accordion-button-fail:hover {
@@ -302,8 +290,8 @@ main {
 }
 
 .badge-pass {
-    border-color: var(--pass-color);
-    color: var(--pass-color);
+    border-color: var(--focus-color);
+    color: var(--focus-color);
 }
 
 .badge-fail {
@@ -350,17 +338,20 @@ main {
 }
 
 footer {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
     position: fixed;
     bottom: 0px;
     right: 0px;
     text-align: right;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
     transition: none;
 }
 
 footer p {
-    margin-right: 108px;
-    margin-left: 16px;
+    margin: 0px 8px;
 }
 
 body.results-fetched footer {
@@ -369,7 +360,7 @@ body.results-fetched footer {
     border: 1px solid var(--border-color);
     bottom: 8px;
     border-radius: var(--control-corner-radius);
-    right: 9px;
+    right: 8px;
 }
 
 a {
@@ -383,39 +374,54 @@ a:hover {
 
 .footer-button {
     padding: 8px;
-    height: 24px;
+    height: 42px;
+    width: 42px;
     border: 1px solid transparent;
-    border-radius: var(--control-corner-radius);
     background-color: transparent;
-    cursor: pointer;
-    position: absolute;
-    bottom: 8px;
 }
 
-.profile-button {
-    right: 58px;
-}
-
-.github-button {
-    right: 8px;
-}
-
-.footer-button:hover {
-    border: 1px solid var(--focus-color);
-}
-
-.github-svg-path {
+.footer-svg-path {
     fill: var(--text-color);
 }
 
-.footer-button:hover .github-svg-path {
+.footer-button:hover .footer-svg-path {
     fill: var(--focus-color);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--smoke-background-color);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup[aria-hidden="false"] {
+    display: flex;
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    padding: 20px;
+    background-color: var(--panel-background);
+    border: 1px solid var(--focus-color);
+    border-radius: var(--control-corner-radius);
+    max-width: 400px;
+    text-align: center;
 }
 
 .loading-progress-bar {
     display: none;
     position: fixed;
-    top: 0px;
+    bottom: 0px;
     left: 0px;
     width: 100%;
     height: 2px;

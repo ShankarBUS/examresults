@@ -1,18 +1,19 @@
-# [Unofficial] TNMGRMU Exam Results Web Interface and .NET Command Line Interface
+# Unofficial TNMGRMU Exam Results Web Interface and .NET Command Line Interface
 
 ## Overview
 
 This project provides an **unofficial platform** to access Tamil Nadu Dr. M.G.R. Medical University (TNMGRMU) Exam Results. It includes:
 
 - A **web-based interface** for students to view their results. [GitHub Pages Link](https://shankarbus.github.io/examresults/)
-- A **.NET command-line interface (CLI)** for batch processing and exporting multiple results into a single CSV file.
+- A **.NET command-line interface (CLI)** for batch processing and exporting multiple results into a single CSV file. It is hardcoded only for **final year** (i.e. `THIRD PROFESSIONAL PART-II`).
 - A [**Google Forms & Apps Script Tutorial**](/Google%20Forms%20&%20Apps%20Script%20Tutorial.md)
+
+## Disclaimer
 
 > [!CAUTION]
 >
-> - This is an **unofficial tool** and is not affiliated with TNMGRMU. Use at your own discretion.
-> - This is hardcoded to only fetch the results for **final year** (i.e. `THIRD PROFESSIONAL PART-II`).
-> - There is no guarantee that this will work this year since it is based on the API used last year.
+> - This is an **unofficial tool** only for educational purposes and is not affiliated with TNMGRMU. Use at your own discretion.
+> - There is no guarantee that this will work forever as they might change the API anytime in the future.
 
 ## Features
 
@@ -120,7 +121,8 @@ https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/loadCourseTerm?registration_no
 
 **Description:**
 
-- This API retrieves the `term_code` for the next API call.
+- This API retrieves the `course_term` for the next API call.
+- Note: it returns an array as there could multiple terms if the student wrote more than one exams recently.
 - Replace `{0}` with the registration number and `{1}` with the `exam_session` obtained from the Login API.
 
 **Sample Response:** (for final year)
@@ -148,7 +150,7 @@ https://cms2api.tnmgrmu.ac.in/Api/index.php/StudentPreview/previewGradeMarkAllCo
 **Description:**
 
 - This API fetches the exam results in JSON format.
-- Replace `{0}` with the registration number and `{1}` with the `term_code` obtained from the Load Course Term API.
+- Replace `{0}` with the registration number and `{1}` with the `course_term` obtained from the Load Course Term API.
 
 **Example Specific URL:** (for final year)
 

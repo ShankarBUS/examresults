@@ -18,10 +18,9 @@ This tutorial explains how to create a Google Form to collect email addresses an
 
 ```javascript
 var formId = ''; // Eg: https://docs.google.com/forms/d/{id}/edit
-var dummyFileId = ''; // Drive id of the dummy json file if needed.
-var debug = false; // Enable only when debugging as it runs the script only once.
-var useDummyJSON = false; // Uses the provided dummy json instead of fetching the actual result.
-var sendEmail = true;
+var debug = true;
+var sendEmail = false;
+var commonTermCode = null; // Fetch and store the course_term or term_code once for safety and use it for further calls.
 
 function main() {
   var form = FormApp.openById(formId);
@@ -50,17 +49,42 @@ function main() {
 
 function getResult(regNo)
 {
-  var json = useDummyJSON ? getDummyJson() : fetchResult(regNo);
+  var json = fetchResultsFromRegNo(regNo);
   var data = JSON.parse(json);
   var str = parseStudentResult(data);
   return str;
 }
 
-function fetchResult(regNo)
-{
-  var url = `https://cms2api.tnmgrmu.ac.in/Api/index.php/StudentPreview/previewGradeMarkAllCourse?registration_no=${regNo}&term_code=THIRD%20PROFESSIONAL%20PART-II`
-  if (debug) console.log(url);
-  var json = UrlFetchApp.fetch(url).getContentText();
+function fetchResultsFromRegNo(regNo) {
+  var resultUrlBase = `https://cms2api.tnmgrmu.ac.in/Api/index.php/StudentPreview/previewGradeMarkAllCourse?registration_no=${regNo}&term_code=`;
+  
+  if (!commonTermCode)
+  {
+    var loginUrl = `https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/appLogin?registration_no=${regNo}&login_type=result`;
+    var loadCourseUrlBase = `https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/loadCourseTerm?registration_no=${regNo}&exam_session=`;
+
+    var loginResponse = UrlFetchApp.fetch(loginUrl).getContentText();;
+    var loginData = JSON.parse(loginResponse);
+    if (loginData.resultcode == '200') {
+      var examSession = loginData.result.exam_session;
+      if (examSession)
+      {
+        var loadCourseUrl = `${loadCourseUrlBase}${encodeURIComponent(examSession)}`;
+        var courseResponse = UrlFetchApp.fetch(loadCourseUrl).getContentText();
+        var courseData = JSON.parse(courseResponse);
+        if (courseData.resultcode == '200' || courseData.result.length == 0)
+        {
+          var term_code = courseData.result[0].course_term;
+          commonTermCode = term_code
+          if (!term_code) return;
+        }
+      }
+    }
+  }
+
+  var resultUrl = `${resultUrlBase}${encodeURIComponent(commonTermCode)}`;
+  if (debug) console.log(resultUrl);
+  var json = UrlFetchApp.fetch(resultUrl).getContentText();
   if (debug) console.log(json);
   return json;
 }
@@ -102,12 +126,6 @@ function isAllPass(data)
   });
 
   return allPass;
-}
-
-function getDummyJson()
-{
-  var file = DriveApp.getFileById(dummyFileId);
-  return file.getBlob().getDataAsString();
 }
 ```
 
