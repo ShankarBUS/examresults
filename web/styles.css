@@ -388,6 +388,11 @@ a:hover {
     fill: var(--focus-color);
 }
 
+.footer-img {
+    background-color: #0e0e0e;
+    border-radius: 12px;
+}
+
 .popup {
     display: none;
     position: fixed;
