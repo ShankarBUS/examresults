@@ -1,76 +1,13 @@
-@import url('https://fonts.cdnfonts.com/css/cascadia-code');
+@import url('https://shankarbus.github.io/kaadu-ui/kaadu-ui.css');
 
 :root {
-    --control-corner-radius: 8px;
-    --animation-duration: 0.3s;
-    --animation-ease: cubic-bezier(0.4, 0, 0.2, 1);
-    --font-family: 'Cascadia Code', monospace;
-
-    --background-color: #f1f1f1;
-    --smoke-background-color: #0000001f;
-    --text-color: #333;
-    --alt-text-color: #f3f3f3;
-    --panel-background: #ffffffaa;
-    --border-color: #ccc;
-    --input-background-color: white;
-    --button-background-color: #f1f1f1;
-    --button-active-background-color: #dfdfdf;
-    --accordion-button-hover-background-color: #dfdfdf;
     --fail-color: #db0000;
-    --focus-color: darkgreen;
-    --dotted-background: radial-gradient(#e2e2e2 5%, #ffffff1f 15%);
-    --overlay-background: linear-gradient(135deg, #1e90ff2f 0%, #ffffff00 50%, #9acd324f 100%);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --background-color: #0e0e0e;
-        --smoke-background-color: #ffffff1f;
-        --text-color: #f3f3f3;
-        --alt-text-color: #333;
-        --panel-background: #1e1e1ecc;
-        --border-color: #555;
-        --input-background-color: #2d2d2d;
-        --button-background-color: #2d2d2d;
-        --button-active-background-color: #3a3a3a;
-        --accordion-button-hover-background-color: #3a3a3a;
         --fail-color: #f44336;
-        --focus-color: yellowgreen;
-        --dotted-background: radial-gradient(#383838 5%, #0000001f 15%);
-        --overlay-background: linear-gradient(135deg, #66ccff2f 0%, #ffffff00 50%, #ccff662f 100%);
     }
-}
-
-* {
-    transition: all var(--animation-duration) var(--animation-ease);
-}
-
-body {
-    font-family: var(--font-family);
-    font-size: 16px;
-    line-height: 1.5;
-    color: var(--text-color);
-    background: var(--background-color);
-    margin: 0px;
-    padding: 0px;
-}
-
-.dotted-background {
-    background-position: 0 0, 14px 14px;
-    background-size: 16px 16px;
-    width: 100%;
-    height: 100%;
-    background-image: var(--dotted-background);
-    position: fixed !important;
-    z-index: -1;
-}
-
-.overlay-background {
-    background: var(--overlay-background);
-    width: 100%;
-    height: 100%;
-    position: fixed !important;
-    z-index: -2;
 }
 
 header {
@@ -91,7 +28,7 @@ header {
     border-width: 1px;
     border-style: solid;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    backdrop-filter: var(--blur-effect);
     transition: top var(--animation-duration) var(--animation-ease), border-radius var(--animation-duration) var(--animation-ease);
 }
 
@@ -122,10 +59,7 @@ body.results-fetched .back-button {
 }
 
 header label {
-    font-family: var(--font-family);
-    font-weight: 800;
     font-size: 30px;
-    display: block;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -154,68 +88,14 @@ input:hover {
     border-color: var(--focus-color);
 }
 
-button {
-    padding: 12px;
-    font-family: var(--font-family);
-    font-size: 14px;
-    font-weight: 600;
-    border: 1px solid var(--border-color);
-    background-color: var(--button-background-color);
-    border-radius: var(--control-corner-radius);
-    cursor: pointer;
-    color: inherit;
-    flex-shrink: 0;
+#main {
+    padding: 32px;
+    padding-bottom: 76px;
+    top: 86px;
 }
 
-button:hover {
-    border-color: var(--focus-color);
-    color: var(--focus-color);
-    background-color: transparent;
-}
-
-button:active {
-    background-color: var(--button-active-background-color);
-    color: inherit;
-}
-
-main {
-    padding: 118px 32px 98px 32px;
-    color: inherit
-}
-
-.card {
-    background: var(--panel-background);
-    border-radius: var(--control-corner-radius);
-    padding: 20px;
-    border: 1px solid var(--border-color);
-    backdrop-filter: blur(10px);
-}
-
-.info-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
-    background-color: transparent;
-    color: var(--text-color);
-}
-
-.label-cell {
-    font-weight: bold;
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    background-color: transparent;
-    color: var(--text-color);
-    white-space: pre-wrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    max-width: 100px;
-}
-
-.value-cell {
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    background-color: transparent;
-    color: var(--text-color);
+.result-group {
+    align-items: stretch;
 }
 
 .pass-message {
@@ -273,20 +153,7 @@ main {
 }
 
 .badge-area {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.badge {
-    padding: 5px 10px;
-    font-family: var(--font-family);
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 12px;
-    border-width: 1px;
-    border-style: solid;
+    flex-wrap: nowrap;
 }
 
 .badge-pass {
@@ -363,15 +230,6 @@ body.results-fetched footer {
     right: 8px;
 }
 
-a {
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-a:hover {
-    color: var(--focus-color);
-}
-
 .footer-button {
     padding: 8px;
     height: 42px;
@@ -393,57 +251,6 @@ a:hover {
     border-radius: 12px;
 }
 
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--smoke-background-color);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-.popup[aria-hidden="false"] {
-    display: flex;
-}
-
-.popup-content {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 10px;
-    padding: 20px;
-    background-color: var(--panel-background);
-    border: 1px solid var(--focus-color);
-    border-radius: var(--control-corner-radius);
-    max-width: 400px;
-    text-align: center;
-}
-
-.loading-progress-bar {
-    display: none;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    height: 2px;
-    overflow: hidden;
-    z-index: 1000;
-}
-
-.loading-progress-bar::before {
-    display: block;
-    content: '';
-    transform-origin: 0% 50%;
-    width: 100%;
-    height: 100%;
-    background-color: var(--focus-color);
-    animation: indeterminateAnimation 1.5s infinite linear;
-}
-
 @keyframes slideDown {
     from {
         max-height: 0;
@@ -453,19 +260,5 @@ a:hover {
     to {
         max-height: 500px;
         opacity: 1;
-    }
-}
-
-@keyframes indeterminateAnimation {
-    0% {
-        transform: translateX(0) scaleX(0);
-    }
-
-    40% {
-        transform: translateX(0) scaleX(0.4);
-    }
-
-    100% {
-        transform: translateX(100%) scaleX(0.5);
     }
 }

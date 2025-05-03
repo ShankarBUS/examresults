@@ -1,5 +1,8 @@
-// Fetching and displaying the results based on the entered registration number.
+import { setupMessagePopup, showMessagePopup } from 'https://shankarbus.github.io/kaadu-ui/kaadu-ui.js';
 
+setupMessagePopup();
+
+// Fetching and displaying the results based on the entered registration number.
 async function fetchResultsFromRegNo(regNo) {
   const loginUrl = `https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/appLogin?registration_no=${regNo}&login_type=result`;
   const loadCourseUrlBase = `https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/loadCourseTerm?registration_no=${regNo}&exam_session=`;
@@ -70,8 +73,9 @@ async function showResults() {
     //     .then(data => {
     //       displayResults(data);
     //     })
-    //     .catch(() => {
-    //       displayResults(backupDummyData);
+    //     .catch((e) => {
+    //       showMessagePopup(e.message);
+    //       //displayResults(backupDummyData);
     //     });
     // }
   } finally {
@@ -107,8 +111,8 @@ function displayResults(data) {
 
   const student = data.result.student[0];
 
-  const card = document.createElement('div');
-  card.className = 'card';
+  const group = document.createElement('div');
+  group.className = 'group result-group';
 
   const infoTable = document.createElement('table');
   infoTable.className = 'info-table';
@@ -138,7 +142,7 @@ function displayResults(data) {
   addRow('TERM:', student.term_name);
   addRow('RESULT PUBLISH DATE:', student.result_publish_from_date);
 
-  card.appendChild(infoTable);
+  group.appendChild(infoTable);
 
   const allpass = student.subject.every(subject => isPass(subject.result));
   const failedSubjects = student.subject.filter(subject => !isPass(subject.result));
@@ -148,12 +152,12 @@ function displayResults(data) {
     const passMessage = document.createElement('p');
     passMessage.textContent = 'CONGRATULATIONS! YOU HAVE PASSED ALL SUBJECTS.';
     passMessage.className = 'pass-message';
-    card.appendChild(passMessage);
+    group.appendChild(passMessage);
   } else {
     const failMessage = document.createElement('p');
     failMessage.textContent = `YOU HAVE FAILED IN THE FOLLOWING SUBJECTS: ${failedSubjectsText}`;
     failMessage.className = 'fail-message';
-    card.appendChild(failMessage);
+    group.appendChild(failMessage);
   }
 
   const accordion = document.createElement('div');
@@ -234,32 +238,14 @@ function displayResults(data) {
     accordion.appendChild(item);
   });
 
-  card.appendChild(accordion);
-  container.appendChild(card);
+  group.appendChild(accordion);
+  container.appendChild(group);
 
   document.body.classList.add('results-fetched');
 }
 
 const disclaimerButton = document.getElementById('disclaimerButton');
-const messagePopup = document.getElementById('messagePopup');
-const closePopup = document.getElementById('closePopup');
 
 disclaimerButton.addEventListener('click', () => {
   showMessagePopup('DISCLAIMER: THIS WEBSITE IS NOT AFFILIATED WITH TNMGRMU. IT IS AN UNOFFICIAL PLATFORM FOR VIEWING EXAM RESULTS, PROVIDED FOR INFORMATIONAL PURPOSES ONLY. FOR OFFICIAL AND AUTHENTIC RESULTS, PLEASE VISIT THE TNMGRMU OFFICIAL WEBSITE.');
-});
-
-function showMessagePopup(message) {
-  const messageText = document.getElementById('popupText');
-  messageText.textContent = message;
-  messagePopup.setAttribute('aria-hidden', 'false');
-}
-
-function hideMessagePopup() {
-  messagePopup.setAttribute('aria-hidden', 'true');
-}
-
-closePopup.addEventListener('click', () => hideMessagePopup());
-
-messagePopup.addEventListener('click', (event) => {
-  if (event.target === messagePopup) hideMessagePopup();
 });

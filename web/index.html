@@ -21,7 +21,9 @@
         </div>
         <div id="loadingProgressBar" class="loading-progress-bar" aria-hidden="true"></div>
     </header>
-    <main id="resultsContainer" role="main" aria-live="polite"></main>
+    <div id="main">
+        <div id="resultsContainer"></div>
+    </div>
     <footer>
         <button id="disclaimerButton" class="footer-button" aria-label="Show disclaimer">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -40,18 +42,13 @@
         </button>
         <button class="footer-button">
             <a href="https://shankarbus.github.io/" target="_blank">
-                <img class="footer-img" src="https://avatars.githubusercontent.com/ShankarBUS" width="24px" height="24px" />
+                <img class="footer-img" src="https://avatars.githubusercontent.com/ShankarBUS" width="24px"
+                    height="24px" />
             </a>
         </button>
         <p>&copy; ShankarBUS</p>
     </footer>
-    <div id="messagePopup" class="popup" aria-hidden="true">
-        <div id="popupContent" class="popup-content">
-            <button id="closePopup" aria-label="Close Popup">OK</button>
-            <p id="popupText"></p>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 
 </html>
