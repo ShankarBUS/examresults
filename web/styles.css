@@ -74,7 +74,6 @@ header label {
 input {
     padding: 12px;
     font-family: var(--font-family);
-    font-size: 14px;
     font-weight: 400;
     border: 1px solid var(--border-color);
     border-radius: var(--control-corner-radius);
@@ -114,21 +113,8 @@ input:hover {
     color: var(--fail-color);
 }
 
-.accordion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
 .accordion-button {
-    width: 100%;
     height: 180px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
 }
 
 .accordion-button-fail:hover {
@@ -185,25 +171,6 @@ input:hover {
     color: var(--text-color);
 }
 
-.accordion-item-content {
-    display: none;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-top: none;
-    border-radius: 0 0 var(--control-corner-radius) var(--control-corner-radius);
-    background-color: var(--panel-background);
-    color: var(--text-color);
-    animation: slideDown var(--animation-duration) var(--animation-ease);
-    margin-top: calc(-1 * var(--control-corner-radius));
-    padding-top: calc(10px + var(--control-corner-radius));
-    position: relative;
-    z-index: -1;
-}
-
-.accordion-item-content p {
-    margin: 0;
-}
-
 footer {
     display: flex;
     gap: 8px;
@@ -249,16 +216,4 @@ body.results-fetched footer {
 .footer-img {
     background-color: #0e0e0e;
     border-radius: 12px;
-}
-
-@keyframes slideDown {
-    from {
-        max-height: 0;
-        opacity: 0;
-    }
-
-    to {
-        max-height: 500px;
-        opacity: 1;
-    }
 }
