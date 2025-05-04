@@ -1,4 +1,4 @@
-import { setupMessagePopup, showMessagePopup } from 'https://shankarbus.github.io/kaadu-ui/kaadu-ui.js';
+import { createExpander, createKeyValueTable, setupMessagePopup, showMessagePopup } from 'https://shankarbus.github.io/kaadu-ui/kaadu-ui.js';
 
 setupMessagePopup();
 
@@ -15,7 +15,7 @@ async function fetchResultsFromRegNo(regNo) {
   }
   const loginData = await loginResponse.json();
   if (loginData.resultcode !== '200') {
-    throw new Error('INVALID REGISTRATION NUMBER.');
+    throw new Error(loginData.resultmessage || 'INVALID REGISTRATION NUMBER.');
   }
   const examSession = loginData.result.exam_session;
   if (!examSession) {
@@ -30,7 +30,7 @@ async function fetchResultsFromRegNo(regNo) {
   }
   const courseData = await courseResponse.json();
   if (courseData.resultcode !== '200' || courseData.result.length === 0) {
-    throw new Error('INVALID REGISTRATION NUMBER.');
+    throw new Error(courseData.resultmessage || 'INVALID REGISTRATION NUMBER.');
   }
   // The student may have written one or more exams recently, but we take only the first one.
   const termCode = courseData.result[0].course_term;
@@ -46,7 +46,7 @@ async function fetchResultsFromRegNo(regNo) {
   }
   const resultData = await resultResponse.json();
   if (resultData.resultcode !== '200') {
-    throw new Error('NO RESULTS FOUND.');
+    throw new Error(resultData.resultmessage || 'NO RESULTS FOUND.');
   }
   return resultData;
 }
@@ -66,18 +66,19 @@ async function showResults() {
     displayResults(resultData);
   } catch (error) {
     showMessagePopup(error.message);
-    // const useDummyData = confirm('API CALL FAILED. DO YOU WANT TO USE DUMMY DATA?');
-    // if (useDummyData) {
-    //   const dummyData = fetch(`./mockdata/dummy${regNo}.json`)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       displayResults(data);
-    //     })
-    //     .catch((e) => {
-    //       showMessagePopup(e.message);
-    //       //displayResults(backupDummyData);
-    //     });
-    // }
+    if (regNo > 3) return; // For testing purposes, we can use dummy data for regNo 1, 2, and 3 only.
+    // If the API call fails, we can use dummy data for regNo 1, 2, and 3.
+    const useDummyData = confirm('API CALL FAILED. DO YOU WANT TO USE DUMMY DATA?');
+    if (useDummyData) {
+      fetch(`./mockdata/dummy${regNo}.json`)
+        .then(response => response.json())
+        .then(data => {
+          displayResults(data);
+        })
+        .catch((e) => {
+          showMessagePopup(e.message);
+        });
+    }
   } finally {
     loadingProgressBar.style.display = 'none';
   }
@@ -114,34 +115,18 @@ function displayResults(data) {
   const group = document.createElement('div');
   group.className = 'group result-group';
 
-  const infoTable = document.createElement('table');
-  infoTable.className = 'info-table';
-
-  const addRow = (label, value) => {
-    const row = document.createElement('tr');
-
-    const labelCell = document.createElement('td');
-    labelCell.textContent = label;
-    labelCell.className = 'label-cell';
-
-    const valueCell = document.createElement('td');
-    valueCell.textContent = value;
-    valueCell.className = 'value-cell';
-
-    row.appendChild(labelCell);
-    row.appendChild(valueCell);
-    infoTable.appendChild(row);
+  const studentInfo = {
+    'NAME': student.student_name,
+    'REGISTRATION NUMBER': student.registration_no,
+    'COURSE': student.course,
+    'INSTITUTION': student.institution_name,
+    'EXAM SESSION': student.exam_session_name,
+    'REGULATION': student.regulation,
+    'TERM': student.term_name,
+    'RESULT PUBLISH DATE': student.result_publish_from_date
   };
 
-  addRow('NAME:', student.student_name);
-  addRow('REGISTRATION NUMBER:', student.registration_no);
-  addRow('COURSE:', student.course);
-  addRow('INSTITUTION:', student.institution_name);
-  addRow('EXAM SESSION:', student.exam_session_name);
-  addRow('REGULATION:', student.regulation);
-  addRow('TERM:', student.term_name);
-  addRow('RESULT PUBLISH DATE:', student.result_publish_from_date);
-
+  const infoTable = createKeyValueTable(studentInfo);
   group.appendChild(infoTable);
 
   const allpass = student.subject.every(subject => isPass(subject.result));
@@ -160,19 +145,12 @@ function displayResults(data) {
     group.appendChild(failMessage);
   }
 
-  const accordion = document.createElement('div');
-  accordion.className = 'accordion-grid';
+  const expanderGrid = document.createElement('div');
+  expanderGrid.className = 'cards-grid';
 
   student.subject.forEach(subject => {
-    const item = document.createElement('div');
-    item.className = 'accordion-item';
-
-    const button = document.createElement('button');
-    button.className = `accordion-button ${isPass(subject.result) ? '' : 'accordion-button-fail'}`;
-
     const detailsPreview = document.createElement('div');
     detailsPreview.className = 'details-preview';
-    button.appendChild(detailsPreview);
 
     const subjectText = document.createElement('span');
     subjectText.textContent = `${subject.subject_name}`;
@@ -206,39 +184,20 @@ function displayResults(data) {
     const totalText = document.createElement('span');
     totalText.textContent = `${totalPercentage.toFixed(1)}%`;
     totalText.className = 'total-text';
-    button.appendChild(totalText);
 
-    button.addEventListener('click', () => {
-      content.style.display = content.style.display === 'block' ? 'none' : 'block';
-    });
-    item.appendChild(button);
+    const marks = subject.paper.reduce((acc, paper) => {
+      acc[paper.paper_name] = paper.obtained_mark;
+      return acc;
+    }, {});
 
-    const content = document.createElement('div');
-    content.className = 'accordion-item-content';
+    const markTable = createKeyValueTable(marks);
 
-    const markTable = document.createElement('table');
-    markTable.className = 'info-table';
-    subject.paper.forEach(paper => {
-      const row = document.createElement('tr');
-
-      const paperNameCell = document.createElement('td');
-      paperNameCell.className = 'label-cell';
-      paperNameCell.textContent = paper.paper_name;
-      const obtainedMarkCell = document.createElement('td');
-      obtainedMarkCell.className = 'value-cell';
-      obtainedMarkCell.textContent = paper.obtained_mark;
-
-      row.appendChild(paperNameCell);
-      row.appendChild(obtainedMarkCell);
-      markTable.appendChild(row);
-    });
-
-    content.appendChild(markTable);
-    item.appendChild(content);
-    accordion.appendChild(item);
+    const expander = createExpander([detailsPreview, totalText], markTable,
+       `expander-button ${isPass(subject.result) ? '' : 'expander-button-fail'}`);
+    expanderGrid.appendChild(expander);
   });
 
-  group.appendChild(accordion);
+  group.appendChild(expanderGrid);
   container.appendChild(group);
 
   document.body.classList.add('results-fetched');

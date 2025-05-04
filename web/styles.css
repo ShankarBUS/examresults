@@ -113,11 +113,11 @@ input:hover {
     color: var(--fail-color);
 }
 
-.accordion-button {
+.expander-button {
     height: 180px;
 }
 
-.accordion-button-fail:hover {
+.expander-button-fail:hover {
     border-color: var(--fail-color);
 }
 
