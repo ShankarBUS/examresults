@@ -72,19 +72,8 @@ header label {
 }
 
 input {
-    padding: 12px;
-    font-family: var(--font-family);
-    font-weight: 400;
-    border: 1px solid var(--border-color);
-    border-radius: var(--control-corner-radius);
-    background-color: var(--input-background-color);
-    color: inherit;
     flex: 1;
     min-width: 20px;
-}
-
-input:hover {
-    border-color: var(--focus-color);
 }
 
 #main {
