@@ -43,18 +43,18 @@ body.results-fetched header {
     gap: 20px;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 body.results-fetched .input-container {
     display: none;
 }
 
-.back-button {
+.header-button {
     display: none;
 }
 
-body.results-fetched .back-button {
+body.results-fetched .header-button {
     display: block;
 }
 

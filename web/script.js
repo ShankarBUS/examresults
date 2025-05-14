@@ -51,13 +51,7 @@ async function fetchResultsFromRegNo(regNo) {
   return resultData;
 }
 
-async function showResults() {
-  const regNo = document.getElementById('regNo').value;
-  if (!regNo) {
-    showMessagePopup('PLEASE ENTER A REGISTRATION NUMBER.');
-    return;
-  }
-
+async function showResultsAsync(regNo) {
   const loadingProgressBar = document.getElementById('loadingProgressBar');
   loadingProgressBar.style.display = 'block';
 
@@ -81,28 +75,48 @@ async function showResults() {
     }
   } finally {
     loadingProgressBar.style.display = 'none';
+
+    urlParams.set('regNo', regNo);
+    window.history.replaceState(null, '',
+      `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`);
   }
 }
 
-document.getElementById('showResults').addEventListener('click', showResults);
+async function onShowResults() {
+  const regNo = document.getElementById('regNo').value;
+  if (!regNo) {
+    showMessagePopup('PLEASE ENTER A REGISTRATION NUMBER.');
+    return;
+  }
+  await showResultsAsync(regNo);
+}
+
+document.getElementById('showResults').addEventListener('click', onShowResults);
 
 document.getElementById('regNo').addEventListener('keypress', (event) => {
-  if (event.key === 'Enter') showResults();
+  if (event.key === 'Enter') onShowResults();
 });
 
 document.getElementById('backButton').addEventListener('click', () => {
   document.getElementById('resultsContainer').innerHTML = '';
   document.getElementById('regNo').value = '';
   document.body.classList.remove('results-fetched');
+
+  urlParams.set('regNo', null);
+  window.history.replaceState(null, '',
+    `${window.location.origin}${window.location.pathname}`);
 });
 
 function isPass(result) {
   return result.toLowerCase() === 'pass';
 }
 
+let resultText = '';
+
 function displayResults(data) {
   const container = document.getElementById('resultsContainer');
   container.innerHTML = '';
+  resultText = '';
 
   if (!data || !data.result || data.resultcode !== '200'
     || !data.result.student || data.result.student.length === 0) {
@@ -145,10 +159,13 @@ function displayResults(data) {
     group.appendChild(failMessage);
   }
 
+  // For sharing
+  resultText = `Name: ${student.student_name}\nReg. No: ${student.registration_no}\n\nSubjects:\n`;
+
   const expanderGrid = document.createElement('div');
   expanderGrid.className = 'cards-grid';
 
-  student.subject.forEach(subject => {
+  student.subject.forEach((subject, index) => {
     const detailsPreview = document.createElement('div');
     detailsPreview.className = 'details-preview';
 
@@ -195,12 +212,19 @@ function displayResults(data) {
     const expander = createExpander([detailsPreview, totalText], markTable,
        `expander-button ${isPass(subject.result) ? '' : 'expander-button-fail'}`);
     expanderGrid.appendChild(expander);
+
+    // For sharing
+    const specialScore = totalPercentage >= 80 ? 'Honors' : totalPercentage >= 75 ? 'Distinction' : '';
+    resultText += `${index + 1}. ${subject.subject_name}: ${subject.result} (${totalPercentage.toFixed(1)}%) ${specialScore ? `- ${specialScore}` : ''}\n`;
   });
 
   group.appendChild(expanderGrid);
   container.appendChild(group);
 
   document.body.classList.add('results-fetched');
+
+  // For sharing
+  resultText += `\nView more details here: ${window.location.href}`;
 }
 
 const disclaimerButton = document.getElementById('disclaimerButton');
@@ -208,3 +232,33 @@ const disclaimerButton = document.getElementById('disclaimerButton');
 disclaimerButton.addEventListener('click', () => {
   showMessagePopup('DISCLAIMER: THIS WEBSITE IS NOT AFFILIATED WITH TNMGRMU. IT IS AN UNOFFICIAL PLATFORM FOR VIEWING EXAM RESULTS, PROVIDED FOR INFORMATIONAL PURPOSES ONLY. FOR OFFICIAL AND AUTHENTIC RESULTS, PLEASE VISIT THE TNMGRMU OFFICIAL WEBSITE.');
 });
+
+const urlParams = new URLSearchParams(window.location.search);
+
+if (urlParams.has('regNo')) {
+  const _regNo = urlParams.get('regNo');
+  document.getElementById('regNo').value = _regNo;
+  showResultsAsync(_regNo);
+}
+
+function shareResults() {
+  console.log(resultText);
+  if (navigator.share) {
+    navigator.share({
+      title: 'Exam Results',
+      text: resultText
+    }).catch(err => {
+      showMessagePopup('SHARING FAILED.');
+      console.error(err);
+    });
+  } else {
+    navigator.clipboard.writeText(resultText).then(() => {
+      showMessagePopup('RESULTS COPIED TO CLIPBOARD.');
+    }).catch(err => {
+      showMessagePopup('FAILED TO COPY RESULTS.');
+      console.error(err);
+    });
+  }
+}
+
+document.getElementById('shareButton').addEventListener('click', shareResults);
