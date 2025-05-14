@@ -14,10 +14,12 @@ This guide demonstrates how to create a Google Form to collect email addresses a
 1. Open [Google Forms](https://forms.google.com).
 2. Create a new form and add the following question:
     - **Registration Number**: Use the "Short Answer" question type and mark it as **Required**.
+
     ![Form Template Screenshot](form-template.png)
 
 3. Navigate to the **Settings** tab, then to the **Responses** section, and enable **"Collect email addresses"** (set to `Verified`).
 4. Ensure **"Limit to 1 response"** is enabled.
+
     ![Form Settings Screenshot](form-settings.png)
 
 ---
@@ -26,7 +28,9 @@ This guide demonstrates how to create a Google Form to collect email addresses a
 
 1. Open the Google Form and click the three dots in the top-right corner.
 2. Select **"Apps Script"** to open the code editor in a new tab.
+
     ![Form Menu Screenshot](form-menu.png)
+
 3. Replace the existing code the following code into the editor:
 
     ```javascript
@@ -165,20 +169,27 @@ This guide demonstrates how to create a Google Form to collect email addresses a
 1. Submit a response in the Google Form.
 2. Set `debug` and `sendEmail` to `true` in the script to test the `main()` function.
 3. Select `main` from the dropdown in the Apps Script editor and click **Debug**.
+
     ![Apps Script Select Function](script-select-fn.png)
+
 4. Check the **Execution log** for results.
 5. If `sendEmail` is enabled, verify that the email was sent successfully.
 6. If results are not yet available, the log will display `No Record Found`.
+
     ![Apps Script Execution Log](script-exec-log.png)
+
 ---
 
 ## Step 4: Automating the Process
 
 1. Click the **Triggers** button (clock icon).
+
     ![Apps Script Triggers](script-triggers.png)
+
 2. Add a new trigger and select the `timeTrigger` function.
 3. Set the event source to **Time-driven** and configure the desired time interval.
 4. Save the trigger. The script will now run automatically based on the configured schedule.
+
     ![Apps Script Time Trigger](script-time-trigger.png)
 
 ---
