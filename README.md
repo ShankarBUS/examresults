@@ -1,24 +1,24 @@
-# Unofficial TNMGRMU Exam Results Web Interface and .NET Command Line Interface
+# Unofficial TNMGRMU Exam Results Web Interface and .NET Command-Line Interface
 
 ## Overview
 
 This project provides an **unofficial platform** to access Tamil Nadu Dr. M.G.R. Medical University (TNMGRMU) Exam Results. It includes:
 
 - A **web-based interface** for students to view their results. [GitHub Pages Link](https://shankarbus.github.io/examresults/)
-- A **.NET command-line interface (CLI)** for batch processing and exporting multiple results into a single CSV file. It is hardcoded only for **final year** (i.e. `THIRD PROFESSIONAL PART-II`).
-- A [**Google Forms & Apps Script Tutorial**](/Google%20Forms%20&%20Apps%20Script%20Tutorial.md)
+- A **.NET command-line interface (CLI)** for batch processing and exporting multiple results into a single CSV file. It is currently hardcoded for **final year** results (i.e., `THIRD PROFESSIONAL PART-II`).
+- A [**Guide for Automating TNGMRMU Exam Result Distribution Using Google Forms and Apps Script**](/docs/automation_with_google_forms_and_apps_script.md)
 
 ## Disclaimer
 
 > [!CAUTION]
 >
-> - This is an **unofficial tool** only for educational purposes and is not affiliated with TNMGRMU. Use at your own discretion.
+> - This is an **unofficial tool** only for educational purposes and is **not affiliated with TNMGRMU**. Use at your own discretion.
 > - There is no guarantee that this will work forever as they might change the API anytime in the future.
 
 ## Features
 
-- **Web Interface**: Enter your registration number to fetch and display results interactively.
-- **.NET CLI Tool**: Automate fetching results for a range of registration numbers and export them to a CSV file.
+- **Web Interface**: Allows users to enter their registration number and fetch results interactively.
+- **.NET CLI Tool**: Automates the process of fetching results for a range of registration numbers and exporting them to a CSV file.
 
 ## Installation and Setup
 
@@ -58,10 +58,10 @@ This project provides an **unofficial platform** to access Tamil Nadu Dr. M.G.R.
 ### Web Interface
 
 1. Open `index.html` in a browser.
-2. Enter your **Registration Number** in the text input.
+2. Enter your **Registration Number** in the input field.
 3. Click the **Show Results** button to fetch and display your exam results.
 4. Use the **Back** button to reset the interface.
-5. Or you directly can use this website: https://shankarbus.github.io/examresults/
+5. Alternatively, visit the hosted website: [https://shankarbus.github.io/examresults/](https://shankarbus.github.io/examresults/)
 
 ### Command-Line Interface (CLI)
 
@@ -122,7 +122,7 @@ https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/loadCourseTerm?registration_no
 **Description:**
 
 - This API retrieves the `course_term` for the next API call.
-- Note: it returns an array as there could multiple terms if the student wrote more than one exams recently.
+- Note: it returns an array as there could be multiple terms if the student wrote more than one exams recently.
 - Replace `{0}` with the registration number and `{1}` with the `exam_session` obtained from the Login API.
 
 **Sample Response:** (for final year)
