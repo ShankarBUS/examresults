@@ -9,7 +9,7 @@ namespace ExamResultsCLI;
 // TOTAL THEORY IN %
 // PRACTICAL/CLINICAL + VIVA IN MARKS
 // PRACTICAL/CLINICAL + VIVA IN %
-// TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %
+// TOTAL (THEORY+PRACTICAL/CLINICAL + VIVA) IN %
 public static class PaperNames
 {
     public const string theory = "THEORY IN MARKS";
@@ -22,7 +22,7 @@ public static class PaperNames
 
     public const string practical = "PRACTICAL/CLINICAL + VIVA IN MARKS";
 
-    public const string total = "TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %";
+    public const string total = "TOTAL (THEORY+PRACTICAL/CLINICAL + VIVA) IN %";
 }
 
 public class ResultResponse
