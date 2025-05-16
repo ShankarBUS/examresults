@@ -59,7 +59,6 @@ This guide demonstrates how to create a Google Form to collect email addresses a
     function main() {
       var form = FormApp.openById(formId);
       if (!form) return;
-
       var formResponses = form.getResponses();
       for (var i = 0; i < formResponses.length; i++) {
         var formResponse = formResponses[i];
@@ -73,7 +72,7 @@ This guide demonstrates how to create a Google Form to collect email addresses a
 
         if (result && sendEmail && email) {
           console.log(`${regNo}: ${email}`);
-          MailApp.sendEmail(email, 'TNMGRMU Final Year Results (Unofficial)', result, { name: 'Automated Script' });
+          MailApp.sendEmail(email, 'TNMGRMU Exam Results (Unofficial)', result, { name: 'Automated Script' });
         }
         if (debug) return;
       }
@@ -84,19 +83,20 @@ This guide demonstrates how to create a Google Form to collect email addresses a
       try {
         var json = fetchResultsFromRegNo(regNo);
         var data = JSON.parse(json);
-        if (data.resultcode !== '200' || !data.result || !data.result.student) {
-          console.error(data.resultmessage);
+        if (!data || data.resultcode !== '200' || !data.result || !data.result.student) {
+          console.error(data?.resultmessage || "Unable to fetch results.");
           return null;
         }
 
-        return parseStudentResult(data);
+        var str = parseStudentResult(data);
+        str += `Please visit the official website to download the "Provisional Result PDF": https://cms2results.tnmgrmuexam.ac.in/#/ExamResult`
+        return str;
       } catch (error) {
         console.error(`Error in 'getResult()' for registration number ${regNo}: ${error.message}`);
         return null;
       }
     }
 
-    // Fetches results from the TNMGRMU API
     function fetchResultsFromRegNo(regNo) {
       try {
         var resultUrlBase = `https://cms2api.tnmgrmu.ac.in/Api/index.php/StudentPreview/previewGradeMarkAllCourse?registration_no=${regNo}&term_code=`;
@@ -120,6 +120,8 @@ This guide demonstrates how to create a Google Form to collect email addresses a
           }
         }
 
+        if (!commonTermCode) return null;
+
         var resultUrl = `${resultUrlBase}${encodeURIComponent(commonTermCode)}`;
         if (debug) console.log(resultUrl);
         var json = UrlFetchApp.fetch(resultUrl).getContentText();
@@ -134,17 +136,25 @@ This guide demonstrates how to create a Google Form to collect email addresses a
     // Parses the student result data into a readable format
     function parseStudentResult(data) {
       var allPass = isAllPass(data) ? ' (All Pass)' : ' :(';
-      var resultString = `Final Year Exam Results${allPass}\n\n`;
+      var resultString = `Exam Results${allPass}\n\n`;
 
       data.result.student.forEach(student => {
-        resultString += `Name: ${student.student_name}\n`;
-        resultString += `Registration No: ${student.registration_no}\n`;
+        resultString += `Name: ${student.student_name}\nRegistration No: ${student.registration_no}\n\n`;
 
-        student.subject.forEach(subject => {
-          resultString += `${subject.subject_name}: ${subject.result}\n`;
-          subject.paper.forEach(paper => {
-            resultString += `    • ${paper.paper_name}: ${paper.obtained_mark}\n`;
-          });
+        student.subject.forEach((subject, index) => {
+          try {
+            const totalPaper = subject.paper.find(paper => paper.paper_name == 'TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %');
+            if (!totalPaper) throw new Error("Can't find total marks");
+
+            const totalPercentage = parseFloat(totalPaper.obtained_mark);
+            const specialScore = totalPercentage >= 80 ? 'Honors' : totalPercentage >= 75 ? 'Distinction' : '';
+            resultString += `${index + 1}. ${subject.subject_name}: ${subject.result} (${totalPercentage.toFixed(1)}%) ${specialScore ? `- ${specialScore}` : ''}\n`;
+          } catch {
+            resultString += `${index + 1}. ${subject.subject_name}: ${subject.result}\n`;
+            subject.paper.forEach(paper => {
+              resultString += `    • ${paper.paper_name}: ${paper.obtained_mark}\n`;
+            });
+          }
         });
       });
 
