@@ -2,6 +2,53 @@ import { createExpander, createKeyValueTable, setupMessagePopup, showMessagePopu
 
 setupMessagePopup();
 
+async function fetchAvailableResults() {
+  try {
+    const dataUrl = 'https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/loadResultData';
+    const response = await fetch(dataUrl);
+    if (!response.ok) {
+      throw new Error('FAILED TO FETCH DATA.');
+    }
+    const data = await response.json();
+    if (data.resultcode !== '200') {
+      throw new Error(data.resultmessage);
+    }
+    return data.result;
+  } catch (error) {
+    showMessagePopup('ERROR IN FETCHING AVAILABLE RESULTS: ' + error.message);
+    return [];
+  }
+}
+
+async function displayAvailableResults() {
+  const data = await fetchAvailableResults();
+  const list = document.getElementById('availableResultsList');
+  list.innerHTML = '';
+
+  if (!data || data.length === 0) {
+    return;
+  }
+
+  data.forEach(item => {
+    const listItem = document.createElement('li');
+    listItem.className = 'available-result-item';
+
+    const publishedDate = document.createElement('span');
+    publishedDate.textContent = item.publised_date;
+
+    const text = document.createElement('span');
+    text.textContent = `${item.course_name} (${item.term_name})`;
+
+    if (item.is_new === 'Yes') {
+      text.className = 'new-result-text';
+    }
+
+    listItem.appendChild(publishedDate);
+    listItem.appendChild(text);
+    list.appendChild(listItem);
+  });
+}
+
 // Fetching and displaying the results based on the entered registration number.
 async function fetchResultsFromRegNo(regNo) {
   const loginUrl = `https://cms2api.tnmgrmu.ac.in/Api/index.php/Login/appLogin?registration_no=${regNo}&login_type=result`;
@@ -183,24 +230,30 @@ function displayResults(data) {
     badge.textContent = subject.result;
     badge.className = `badge ${isPass(subject.result) ? 'badge-pass' : 'badge-fail'}`;
 
-    const totalPercentage = parseFloat(subject.paper.find(paper => paper.paper_name == 'TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %').obtained_mark);
-    if (totalPercentage >= 75) {
-      const specialBadge = document.createElement('span');
-      if (totalPercentage >= 80) {
-        specialBadge.textContent = 'H';
-        specialBadge.className = 'badge badge-honors';
-      } else if (totalPercentage >= 75) {
-        specialBadge.textContent = 'D';
-        specialBadge.className = 'badge badge-distinction';
+    const totalText = document.createElement('span');
+
+    const totalPaper = subject.paper.find(paper => paper.paper_name == 'TOTAL (THEORY+PRACTICAL/CLINICAL + VIVA) IN %');
+    if (totalPaper) {
+
+      const totalPercentage = parseFloat(totalPaper.obtained_mark);
+      if (totalPercentage >= 75) {
+        const specialBadge = document.createElement('span');
+        if (totalPercentage >= 80) {
+          specialBadge.textContent = 'H';
+          specialBadge.className = 'badge badge-honors';
+        } else if (totalPercentage >= 75) {
+          specialBadge.textContent = 'D';
+          specialBadge.className = 'badge badge-distinction';
+        }
+        badgeArea.appendChild(specialBadge);
       }
-      badgeArea.appendChild(specialBadge);
+      totalText.textContent = `${totalPercentage.toFixed(1)}%`;
+      const specialScore = totalPercentage >= 80 ? 'Honors' : totalPercentage >= 75 ? 'Distinction' : '';
+      resultText += `${index + 1}. ${subject.subject_name}: ${subject.result} (${totalPercentage.toFixed(1)}%) ${specialScore ? `- ${specialScore}` : ''}\n`;
     }
+    totalText.className = 'total-text';
 
     badgeArea.appendChild(badge);
-
-    const totalText = document.createElement('span');
-    totalText.textContent = `${totalPercentage.toFixed(1)}%`;
-    totalText.className = 'total-text';
 
     const marks = subject.paper.reduce((acc, paper) => {
       acc[paper.paper_name] = paper.obtained_mark;
@@ -210,12 +263,8 @@ function displayResults(data) {
     const markTable = createKeyValueTable(marks);
 
     const expander = createExpander([detailsPreview, totalText], markTable,
-       `expander-button ${isPass(subject.result) ? '' : 'expander-button-fail'}`);
+      `expander-button ${isPass(subject.result) ? '' : 'expander-button-fail'}`);
     expanderGrid.appendChild(expander);
-
-    // For sharing
-    const specialScore = totalPercentage >= 80 ? 'Honors' : totalPercentage >= 75 ? 'Distinction' : '';
-    resultText += `${index + 1}. ${subject.subject_name}: ${subject.result} (${totalPercentage.toFixed(1)}%) ${specialScore ? `- ${specialScore}` : ''}\n`;
   });
 
   group.appendChild(expanderGrid);
@@ -262,3 +311,5 @@ function shareResults() {
 }
 
 document.getElementById('shareButton').addEventListener('click', shareResults);
+
+displayAvailableResults();

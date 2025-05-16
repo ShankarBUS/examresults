@@ -18,7 +18,7 @@ header {
     max-width: 85%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -100%);
     text-align: center;
     overflow: hidden;
     background: var(--panel-background);
@@ -205,4 +205,40 @@ body.results-fetched footer {
 .footer-img {
     background-color: #0e0e0e;
     border-radius: 12px;
+}
+
+.available-results-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-width: 85%;
+    height: 30%;
+    transform: translate(-50%, 32px);
+    background: var(--panel-background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--control-corner-radius);
+    backdrop-filter: var(--blur-effect);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.results-fetched .available-results-container {
+    display: none;
+}
+
+.new-result-text::before {
+    content: 'NEW';
+    font-size: 12px;
+    color: var(--focus-color);
+    border-radius: var(--control-corner-radius);
+    border: 1px solid var(--focus-color);
+    padding: 2px 4px;
+    margin-right: 10px;
 }
