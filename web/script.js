@@ -154,6 +154,16 @@ document.getElementById('backButton').addEventListener('click', () => {
     `${window.location.origin}${window.location.pathname}`);
 });
 
+// New: TOTAL (THEORY+PRACTICAL/CLINICAL + VIVA) IN %
+// Prev: TOTAL (THEORY+PRACTICAL/CLINICAL+VIVA) IN %
+// So it is safe to check for both by checking the keys values' presence.
+let totalPaperKey = ['TOTAL', 'THEORY', 'PRACTICAL'];
+function isTotalPaper(paper) {
+  if (!paper || !paper.paper_name) return false;
+  const paperName = paper.paper_name.toUpperCase();
+  return totalPaperKey.every(key => paperName.includes(key));
+}
+
 function isPass(result) {
   return result.toLowerCase() === 'pass';
 }
@@ -232,7 +242,7 @@ function displayResults(data) {
 
     const totalText = document.createElement('span');
 
-    const totalPaper = subject.paper.find(paper => paper.paper_name == 'TOTAL (THEORY+PRACTICAL/CLINICAL + VIVA) IN %');
+    const totalPaper = subject.paper.find(paper => isTotalPaper(paper));
     if (totalPaper) {
 
       const totalPercentage = parseFloat(totalPaper.obtained_mark);
