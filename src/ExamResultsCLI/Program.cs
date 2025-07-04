@@ -13,10 +13,6 @@ public class Program
 
     private static string commonCourseTerm = string.Empty;
 
-    private static long startRegNo = 0;
-
-    private static long endRegNo = 0;
-
     private static string workingDirectory = Directory.GetCurrentDirectory();
 
     private static string resultsFile = "Results.csv";
@@ -35,46 +31,89 @@ public class Program
         }
 
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Unofficial TNMGRMU Exam Results CLI by ShankarBUS");
+        Console.WriteLine("Welcome to the Unofficial TNMGRMU Exam Results CLI by ShankarBUS.");
         Console.ResetColor();
-        Console.WriteLine("This tool fetches exam results for a range of registration numbers from TNMGRMU and saves them as JSON files, " +
-            "which can later be processed and merged into a CSV.");
+        Console.WriteLine("This tool fetches exam results for a range of registration numbers from TNMGRMU and saves them as JSON files. These files can later be processed and merged into a CSV file.");
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("Please note that this tool is NOT AFFILIATED WITH TNMGRMU and is for educational purposes only.");
+        Console.WriteLine("Note: This tool is NOT AFFILIATED WITH TNMGRMU and is intended for educational purposes only.");
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("Please use it responsibly and do not abuse the service.");
+        Console.WriteLine("Use this tool responsibly. Do not abuse the service.");
         Console.ResetColor();
-        Console.WriteLine("Visit https://github.com/ShankarBUS/examresults for further details.");
+        Console.WriteLine("For more information, visit: https://github.com/ShankarBUS/examresults");
 
-        Console.WriteLine("Type the starting registration number.");
-        if (long.TryParse(Console.ReadLine(), out long s))
+        List<long> regNumbers = [];
+        Console.WriteLine("How would you like to provide the registration numbers?");
+        Console.WriteLine("1. Load registration numbers from a file.");
+        Console.WriteLine("2. Enter a starting and ending registration number.");
+        Console.Write("Enter your choice (1 or 2): ");
+        string? choice = Console.ReadLine().Trim();
+        if (choice == "1")
         {
-            startRegNo = s;
-        }
-        Console.WriteLine("Type the ending registration number.");
-        if (long.TryParse(Console.ReadLine(), out long e))
-        {
-            endRegNo = e;
-        }
-
-        FetchResultsAsync().Wait();
-        Console.WriteLine("All results have been fetched successfully.");
-        Console.WriteLine("Type (Y/y) to save the results to a CSV file or any other key to exit.");
-        if (Console.ReadLine()?.ToLower() == "y")
-        {
-            BatchResultProcessor.FormatResultAsync(workingDirectory, jsonFolder, resultsFile).Wait();
-            Console.WriteLine($"Results saved to {resultsFile} successfully.");
+            Console.Write("Enter the path to the file containing the registration numbers (one per line): ");
+            string? filePath = Console.ReadLine().Trim();
+            if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath))
+            {
+                foreach (var line in File.ReadAllLines(filePath))
+                {
+                    if (long.TryParse(line.Trim(), out long regNo))
+                    {
+                        regNumbers.Add(regNo);
+                    }
+                }
+                if (regNumbers.Count == 0)
+                {
+                    Console.WriteLine("No valid registration numbers were found in the file. The program will now exit.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("The specified file was not found, or the path is invalid. The program will now exit.");
+                return;
+            }
         }
         else
         {
-            Console.WriteLine("Exiting without saving results.");
+            Console.Write("Enter the starting registration number: ");
+            long startRegNo = 0;
+            long endRegNo = 0;
+            if (long.TryParse(Console.ReadLine(), out long s))
+            {
+                startRegNo = s;
+            }
+            Console.Write("Enter the ending registration number: ");
+            if (long.TryParse(Console.ReadLine(), out long e))
+            {
+                endRegNo = e;
+            }
+            if (endRegNo < startRegNo)
+            {
+                Console.WriteLine("The ending registration number cannot be less than the starting registration number. The program will now exit.");
+                return;
+            }
+            for (long regNo = startRegNo; regNo <= endRegNo; regNo++)
+            {
+                regNumbers.Add(regNo);
+            }
+        }
+
+        FetchResultsAsync(regNumbers).Wait();
+        Console.WriteLine("All results have been fetched successfully.");
+        Console.Write("Enter 'Y' to save the results to a CSV file, or any other key to exit: ");
+        if (Console.ReadLine()?.Trim().ToLower() == "y")
+        {
+            BatchResultProcessor.FormatResultAsync(workingDirectory, jsonFolder, resultsFile).Wait();
+            Console.WriteLine($"Results have been saved to '{resultsFile}' successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Exiting without saving the results.");
         }
     }
-
-    private static async Task FetchResultsAsync()
+    private static async Task FetchResultsAsync(List<long> regNumbers)
     {
         using HttpClient client = new();
-        for (long regNo = startRegNo; regNo <= endRegNo; regNo++)
+        foreach (long regNo in regNumbers)
         {
             if (string.IsNullOrEmpty(commonCourseTerm))
             {
